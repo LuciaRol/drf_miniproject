@@ -1,7 +1,7 @@
 # api/serializers.py
 from rest_framework import serializers
-from .models.post import Post
-from .models.comment import Comment
+from .models import Post
+from .models import Comment
 
 class PostSerializer(serializers.ModelSerializer):
     # Incluye los comentarios relacionados en el mismo serializador de Post
