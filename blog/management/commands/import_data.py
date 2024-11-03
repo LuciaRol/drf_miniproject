@@ -1,7 +1,7 @@
 # api/management/commands/import_data.py
 import requests
 from django.core.management.base import BaseCommand
-from api.models import Post, Comment
+from blog.models import Post, Comment
 
 class Command(BaseCommand):
     help = "Import data from JSONPlaceholder API"

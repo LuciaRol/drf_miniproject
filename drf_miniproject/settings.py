@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'blog',
+    'rest_framework_simplejwt.token_blacklist',  # To manage JWT tokens
+    'rest_framework.authtoken',
+    'django_extensions',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -78,10 +82,15 @@ WSGI_APPLICATION = 'drf_miniproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'blog',
+        'USER': 'blog',
+        'PASSWORD': 'blog',
+        'HOST': 'localhost',  # o el nombre del contenedor si usas Docker
+        'PORT': '5432',  # puerto por defecto para PostgreSQL
     }
 }
+
 
 
 # Password validation
