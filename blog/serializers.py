@@ -1,7 +1,17 @@
 # api/serializers.py
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import Post
 from .models import Comment
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    blog = serializers.HyperlinkedRelatedField(many=True, view_name='post-detail', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['url', 'id', 'username', 'posts', 'comments']
+
 
 class PostSerializer(serializers.ModelSerializer):
     # Incluye los comentarios relacionados en el mismo serializador de Post
@@ -18,3 +28,5 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'post', 'name', 'email', 'body']
         read_only_fields = ['id']  # 'id' es de solo lectura
+
+

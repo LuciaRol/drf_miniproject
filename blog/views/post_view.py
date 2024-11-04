@@ -1,4 +1,4 @@
-# api/views/post_view.py
+# blog/views/post_view.py
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from ..models.post import Post
