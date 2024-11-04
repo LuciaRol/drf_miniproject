@@ -82,12 +82,8 @@ WSGI_APPLICATION = 'drf_miniproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blog',
-        'USER': 'blog',
-        'PASSWORD': 'blog',
-        'HOST': 'localhost',  # o el nombre del contenedor si usas Docker
-        'PORT': '5432',  # puerto por defecto para PostgreSQL
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

@@ -1,0 +1,12 @@
+{
+    "posts": [
+      { "id": 1, "title": "Primera publicación", "author": "Juan" },
+      { "id": 2, "title": "Segunda publicación", "author": "Ana" }
+    ],
+    "comments": [
+      { "id": 1, "postId": 1, "body": "Buen artículo!" },
+      { "id": 2, "postId": 2, "body": "Interesante" }
+    ],
+    "profile": { "name": "Juan" }
+  }
+  
