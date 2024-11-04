@@ -5,12 +5,10 @@ from .models import Post
 from .models import Comment
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    blog = serializers.HyperlinkedRelatedField(many=True, view_name='post-detail', read_only=True)
-
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'posts', 'comments']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'comments'] 
 
 
 class PostSerializer(serializers.ModelSerializer):
