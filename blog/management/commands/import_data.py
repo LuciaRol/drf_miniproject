@@ -2,6 +2,7 @@
 import requests
 from django.core.management.base import BaseCommand
 from blog.models import Post, Comment
+import ipdb
 
 class Command(BaseCommand):
     help = "Import data from JSONPlaceholder API"
