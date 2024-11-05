@@ -1,47 +1,30 @@
 # api/serializers.py
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from .models import Post, Comment
 
 
-class CommentCreateSerializer(serializers.ModelSerializer):
-    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())  # Selection of the post
-
-    class Meta:
-        model = Comment
-        fields = ['id', 'post', 'author', 'body', 'created_at']
-        read_only_fields = ['author', 'created_at']
-
-
-class CommentUpdateSerializer(serializers.ModelSerializer):
-    post = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    class Meta:
-        model = Comment
-        fields = ['id', 'post', 'author', 'body', 'created_at']
-        read_only_fields = ['author', 'created_at']
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField()
-    like_count = serializers.SerializerMethodField()
-    is_liked = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Comment
-        fields = ['id', 'post', 'author', 'body', 'created_at']
-
-
-
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField()
-    comments = CommentSerializer(many=True, read_only=True)
+    # Incluye los comentarios relacionados en el mismo serializador de Post
+    comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'body', 'author', 'created_at', 'comments']
+        fields = ['id', 'user_id', 'title', 'body', 'comments']
+        read_only_fields = ['id', 'user_id'] 
+
+    def create(self, validated_data):
+        validated_data['user_id'] = 99999942  # Establecer user_id estático para los nuevos posts
+        return super().create(validated_data)
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'post', 'name', 'email', 'body']
+        read_only_fields = ['id']  # 'id' es de solo lectura
+
 
 
 class UserSerializer(serializers.ModelSerializer):

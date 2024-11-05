@@ -2,14 +2,14 @@
 import requests
 from django.core.management.base import BaseCommand
 from blog.models import Post, Comment
-import ipdb
+
 
 class Command(BaseCommand):
     help = "Import data from JSONPlaceholder API"
 
     def handle(self, *args, **kwargs):
         # Importar posts
-        posts_response = requests.get("https://jsonplaceholder.typicode.com/posts")
+        posts_response = requests.get("https://jsonplaceholder.typicode.com/posts", timeout=5)
         posts_data = posts_response.json()
 
         for post_data in posts_data:
@@ -23,7 +23,7 @@ class Command(BaseCommand):
             )
 
         # Importar comentarios
-        comments_response = requests.get("https://jsonplaceholder.typicode.com/comments")
+        comments_response = requests.get("https://jsonplaceholder.typicode.com/comments", timeout=5)
         comments_data = comments_response.json()
 
         for comment_data in comments_data:
