@@ -1,4 +1,4 @@
-# api/models/post.py
+# blog/models/post.py
 from django.contrib.auth.models import User
 from django.db import models
 

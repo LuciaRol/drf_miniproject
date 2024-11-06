@@ -4,7 +4,7 @@ from ..models.post import Post
 from ..serializers import PostSerializer
 
 class IsOwner(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request, views, obj):
         return obj.author == request.user
 
 class PostViewSet(viewsets.ModelViewSet):
