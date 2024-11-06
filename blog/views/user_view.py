@@ -8,6 +8,6 @@ from blog.serializers import UserSerializer
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder a la lista de usuarios
+    #permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder a la lista de usuarios
 
     
