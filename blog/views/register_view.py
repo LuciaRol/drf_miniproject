@@ -1,5 +1,5 @@
 
-from rest_framework import generics, permissions, status
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
@@ -27,6 +27,3 @@ class RegisterView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
     
 
-class IsOwner(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        return obj.author == request.user
