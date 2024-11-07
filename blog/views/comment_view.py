@@ -11,11 +11,3 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        user = self.request.user
-
-        # Verificar si el usuario está autenticado
-        if user.is_authenticated:
-            serializer.save(user=user)  # Asignar el usuario autenticado al comentario
-        else:
-            raise PermissionDenied("You must be logged in to create a comment.")

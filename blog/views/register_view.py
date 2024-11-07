@@ -1,21 +1,16 @@
-
-from rest_framework import generics, status
+from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.mixins import CreateModelMixin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from ..serializers import UserSerializer
-
 
 User = get_user_model()
 
-class RegisterView(generics.CreateAPIView):
+class RegisterViewSet(CreateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
-    permission_classes = [AllowAny]  # Allow any user to access
+    permission_classes = [AllowAny]
     serializer_class = UserSerializer
-
-    def get_queryset(self):
-        return User.objects.all()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -25,5 +20,3 @@ class RegisterView(generics.CreateAPIView):
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "message": "User created successfully",
         }, status=status.HTTP_201_CREATED)
-    
-

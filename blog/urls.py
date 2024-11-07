@@ -10,20 +10,24 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from .views import UserViewSet, PostViewSet, CommentViewSet, RegisterView
+from .views import (
+    UserViewSet, 
+    PostViewSet, 
+    CommentViewSet, 
+    RegisterViewSet
+)
 
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'posts', PostViewSet)
 router.register(r'comments', CommentViewSet)
+router.register(r'register', RegisterViewSet, basename='register')
 
 urlpatterns = [
     path('', include(router.urls)),
     
-    path('api/login/', TokenObtainPairView.as_view(), name='login'), # Es lo mismo que el api/token/ ?
-    path('api/register/', RegisterView.as_view(), name='register'),
-
+    path('api/login/', TokenObtainPairView.as_view(), name='login'), # Es lo mismo que el api/token/ !!
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
