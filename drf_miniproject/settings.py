@@ -63,16 +63,25 @@ WSGI_APPLICATION = 'drf_miniproject.wsgi.application'
 
 # Database
 # Se actualiza para conectar a la BD postgresql
+import os
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blog',  
-        'USER': 'blog',  
-        'PASSWORD': 'blog',            
-        'HOST': 'localhost',                    
-        'PORT': '5432',                          
+    "default": {
+        # Add the docker environment ENGINE variable or for local development use sqlite3 engine
+        "ENGINE": os.environ.get("ENGINE", "django.db.backends.postgresql"),
+        # Add the docker environment DATABASE variable or use the local sqlite database source
+        "NAME": os.environ.get("NAME", "blog"),
+        # Add the docker USER environment variable or on need password for sqlite3
+        "USER": os.environ.get("USER", "blog"),
+        # Add the docker PASSWORD environment variable or on need password for sqlite3
+        "PASSWORD": os.environ.get("PASSWORD", "blog"),
+        # Add the docker HOST environment variable or on need host for sqlite3
+        "HOST": os.environ.get("HOST", "localhost"),
+        # Add the docker HOST environment variable or on need port for sqlite3
+        "PORT": os.environ.get("PORT", "5432"),
     }
 }
+
 
 
 # Password validation

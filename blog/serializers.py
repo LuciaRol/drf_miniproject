@@ -1,25 +1,32 @@
+""" Serializers for the blog app """
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from .models import Post, Comment
 
 class CommentSerializer(serializers.ModelSerializer):
+    """ Serializer for the Comment model """
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), required=False)  # No es obligatorio enviar el 'post'
 
     class Meta:
+        """ Meta class for the CommentSerializer """
         model = Comment
         fields = ['id', 'post', 'name', 'email', 'body']
         read_only_fields = ['id', 'user'] 
 
     def validate_post(self, value):
+        """ Validate that the post is published """
         if not value.published:
             raise serializers.ValidationError("No se pueden agregar comentarios a un post que no está publicado.")
         return value
 
 
 class PostSerializer(serializers.ModelSerializer):
+    """ Serializer for the Post model """
     comments = CommentSerializer(many=True, required=False)
 
     class Meta:
+        """ Meta class for the PostSerializer """
         model = Post
         fields = ['id', 'user_id', 'title', 'body', 'comments']
         read_only_fields = ['id', 'user_id']
@@ -43,12 +50,12 @@ class PostSerializer(serializers.ModelSerializer):
         return post
 
 
-
-
 class UserSerializer(serializers.ModelSerializer):
+    """ Serializer for the User model """
     password = serializers.CharField(write_only=True)
 
     class Meta:
+        """ Meta class for the UserSerializer """
         model = User
         fields = ['id', 'email', 'username', 'password']
 

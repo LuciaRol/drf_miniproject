@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Post(models.Model):
+    """ Model for blog posts """
     user_id = models.IntegerField()
     title = models.CharField(max_length=255)
     body = models.TextField()
