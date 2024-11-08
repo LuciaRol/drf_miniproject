@@ -17,7 +17,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(many=True)
+    comments = CommentSerializer(many=True, required=False)
 
     class Meta:
         model = Post
@@ -27,11 +27,14 @@ class PostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         comments_data = validated_data.pop('comments', [])
 
+        # Asignar el usuario actual o el predeterminado (99999942)
         user = self.context['request'].user if 'request' in self.context else User.objects.get(id=99999942)
         validated_data['user_id'] = user.id
 
+        # Crear el post
         post = Post.objects.create(**validated_data)
 
+        # Si se proporcionan comentarios, crear los comentarios
         for comment_data in comments_data:
             comment_data['post'] = post
             comment_data['user'] = comment_data.get('user', user)
