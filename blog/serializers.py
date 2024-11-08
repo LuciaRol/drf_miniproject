@@ -1,29 +1,45 @@
-# api/serializers.py
 from rest_framework import serializers
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from .models import Post, Comment
 
-
 class CommentSerializer(serializers.ModelSerializer):
+    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), required=False)  # No es obligatorio enviar el 'post'
+
     class Meta:
         model = Comment
         fields = ['id', 'post', 'name', 'email', 'body']
         read_only_fields = ['id', 'user'] 
 
+    def validate_post(self, value):
+        if not value.published:
+            raise serializers.ValidationError("No se pueden agregar comentarios a un post que no está publicado.")
+        return value
+
 
 class PostSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(many=True, read_only=True)
-    
+    comments = CommentSerializer(many=True)
 
     class Meta:
         model = Post
         fields = ['id', 'user_id', 'title', 'body', 'comments']
-        read_only_fields = ['id', 'user_id'] 
+        read_only_fields = ['id', 'user_id']
 
     def create(self, validated_data):
-        validated_data['user_id'] = 99999942  
-        return super().create(validated_data)
+        comments_data = validated_data.pop('comments', [])
+
+        user = self.context['request'].user if 'request' in self.context else User.objects.get(id=99999942)
+        validated_data['user_id'] = user.id
+
+        post = Post.objects.create(**validated_data)
+
+        for comment_data in comments_data:
+            comment_data['post'] = post
+            comment_data['user'] = comment_data.get('user', user)
+            Comment.objects.create(**comment_data)
+
+        return post
+
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -43,10 +59,3 @@ class UserSerializer(serializers.ModelSerializer):
         if 'password' in validated_data:
             validated_data['password'] = make_password(validated_data['password'])
         return super(UserSerializer, self).update(instance, validated_data)
-
-
-
-
-
-
-
