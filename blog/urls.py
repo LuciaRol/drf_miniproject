@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include(router.urls)),
     
     path('api/login/', TokenObtainPairView.as_view(), name='login'), # Es lo mismo que el api/token/ !!
+    # path('register/', RegisterViewSet.as_view({'post': 'create'}), name='register'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 

@@ -5,9 +5,16 @@ from django.contrib.auth.models import User
 from .models import Post, Comment
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'post', 'name', 'email', 'body']
+        read_only_fields = ['id', 'user'] 
+
+
 class PostSerializer(serializers.ModelSerializer):
-    # Incluye los comentarios relacionados en el mismo serializador de Post
-    comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
+    
 
     class Meta:
         model = Post
@@ -15,16 +22,8 @@ class PostSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'user_id'] 
 
     def create(self, validated_data):
-        validated_data['user_id'] = 99999942  # Establecer user_id estático para los nuevos posts
+        validated_data['user_id'] = 99999942  
         return super().create(validated_data)
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = ['id', 'post', 'user', 'name', 'email', 'body']
-        read_only_fields = ['id', 'user'] 
-
 
 
 class UserSerializer(serializers.ModelSerializer):
