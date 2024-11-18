@@ -14,11 +14,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'post', 'name', 'email', 'body']
         read_only_fields = ['id', 'user'] 
 
-    def validate_post(self, value):
-        """ Validate that the post is published """
-        if not value.published:
-            raise serializers.ValidationError("No se pueden agregar comentarios a un post que no está publicado.")
-        return value
 
 
 class PostSerializer(serializers.ModelSerializer):

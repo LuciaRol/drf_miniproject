@@ -14,7 +14,7 @@ from .views import (
     UserViewSet, 
     PostViewSet, 
     CommentViewSet, 
-    RegisterViewSet
+    RegisterViewSet,
 )
 
 
@@ -27,16 +27,12 @@ router.register(r'register', RegisterViewSet, basename='register')
 urlpatterns = [
     path('', include(router.urls)),
     
-    path(
-        'api/login/', 
-        TokenObtainPairView.as_view(), 
-        name='login'
-    ),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('register/', RegisterViewSet.as_view({'post': 'create'}), name='register'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),  # Ruta para el esquema OpenAPI
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),  # Ruta para el esquema OpenAPIA
     path(
         'swagger/', 
         SpectacularSwaggerView.as_view(url_name='schema'), 
