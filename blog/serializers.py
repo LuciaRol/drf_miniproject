@@ -6,14 +6,23 @@ from .models import Post, Comment
 
 class CommentSerializer(serializers.ModelSerializer):
     """ Serializer for the Comment model """
-    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), required=False)  # No es obligatorio enviar el 'post'
+    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), required=False)
     email = serializers.ReadOnlyField(source='user.email')
+    name = serializers.CharField(max_length=255)
+    body = serializers.CharField(max_length=2000)
 
     class Meta:
         """ Meta class for the CommentSerializer """
         model = Comment
         fields = ['id', 'post', 'name', 'email', 'body', 'created_at']
-        read_only_fields = ['id', 'user'] 
+        read_only_fields = ['id', 'user']
+
+    def create(self, validated_data):
+        user = self.context['request'].user  # Obtener el usuario autenticado
+        validated_data['user'] = user
+        return super().create(validated_data)
+
+
 
 
 
