@@ -19,19 +19,22 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     """ Serializer for the Post model """
     comments = CommentSerializer(many=True, required=False)
+    user_id = serializers.ReadOnlyField(source='author.id')
+    username = serializers.ReadOnlyField(source='author.username')
+    comments_count = serializers.IntegerField(source='comments.count', read_only=True)
 
     class Meta:
         """ Meta class for the PostSerializer """
         model = Post
-        fields = ['id', 'user_id', 'title', 'body', 'comments']
-        read_only_fields = ['id', 'user_id']
+        fields = ['id', 'user_id', 'username', 'title', 'body', 'comments', 'comments_count']
+        read_only_fields = ['id', 'user_id', 'username']
 
     def create(self, validated_data):
         comments_data = validated_data.pop('comments', [])
 
         # Asignar el usuario actual o el predeterminado (99999942)
         user = self.context['request'].user if 'request' in self.context else User.objects.get(id=99999942)
-        validated_data['user_id'] = user.id
+        validated_data['author'] = user
 
         # Crear el post
         post = Post.objects.create(**validated_data)
@@ -43,6 +46,7 @@ class PostSerializer(serializers.ModelSerializer):
             Comment.objects.create(**comment_data)
 
         return post
+
 
 
 class UserSerializer(serializers.ModelSerializer):
