@@ -7,11 +7,12 @@ from .models import Post, Comment
 class CommentSerializer(serializers.ModelSerializer):
     """ Serializer for the Comment model """
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), required=False)  # No es obligatorio enviar el 'post'
+    email = serializers.ReadOnlyField(source='user.email')
 
     class Meta:
         """ Meta class for the CommentSerializer """
         model = Comment
-        fields = ['id', 'post', 'name', 'email', 'body']
+        fields = ['id', 'post', 'name', 'email', 'body', 'created_at']
         read_only_fields = ['id', 'user'] 
 
 
@@ -26,7 +27,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         """ Meta class for the PostSerializer """
         model = Post
-        fields = ['id', 'user_id', 'username', 'title', 'body', 'comments', 'comments_count']
+        fields = ['id', 'user_id', 'username', 'title', 'body', 'comments', 'comments_count', 'created_at']
         read_only_fields = ['id', 'user_id', 'username']
 
     def create(self, validated_data):

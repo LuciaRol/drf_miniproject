@@ -7,7 +7,7 @@ from ..serializers import CommentSerializer
 
 class CommentViewSet(viewsets.ModelViewSet):
     """ ViewSet for Comment model """
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.all().order_by('-created_at')
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
